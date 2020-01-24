@@ -2,6 +2,8 @@
 
 You are provided with a pre-generated graph consisting of 500 rooms. You are responsible for filling `traversal_path` with directions that, when walked in order, will visit every room on the map at least once.
 
+- DFS? DFT?  (DFT and BFS)
+
 Open `adv.py`. There are four parts to the provided code:
 
 * World generation code. Do not modify this!
@@ -14,6 +16,7 @@ You may find the commands `player.current_room.id`, `player.current_room.get_exi
 
 To solve this path, you'll want to construct your own traversal graph. You start in room `0`, which contains exits `['n', 's', 'w', 'e']`. Your starting graph should look something like this:
 
+# DICTIONARY OF DICTIONARIES: 
 ```
 {
   0: {'n': '?', 's': '?', 'w': '?', 'e': '?'}
@@ -28,14 +31,16 @@ Try moving south and you will find yourself in room `5` which contains exits `['
   5: {'n': 0, 's': '?', 'e': '?'}
 }
 ```
-
+### use social network as an example - not identical - code has to be modified 
 You know you are done when you have exactly 500 entries (0-499) in your graph and no `'?'` in the adjacency dictionaries. To do this, you will need to write a traversal algorithm that logs the path into `traversal_path` as it walks.
 
 ## Hints
 
+
 There are a few smaller graphs in the file which you can test your traversal method on before committing to the large graph. You may find these easier to debug.
 
-Start by writing an algorithm that picks a random unexplored direction from the player's current room, travels and logs that direction, then loops. This should cause your player to walk a depth-first traversal. When you reach a dead-end (i.e. a room with no unexplored paths), walk back to the nearest room that does contain an unexplored path.
+# be mindful , that there could be muliple BFT, BFS, DFS, DFT - more than one is used in this sprint
+******Start by writing an algorithm that picks a random unexplored direction from the player's current room, travels and logs that direction, then loops.****** This should cause your player to walk a depth-first traversal. When you reach a dead-end (i.e. a room with no unexplored paths), walk back to the nearest room that does contain an unexplored path.
 
 You can find the path to the shortest unexplored room by using a breadth-first search for a room with a `'?'` for an exit. If you use the `bfs` code from the homework, you will need to make a few modifications.
 
