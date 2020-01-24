@@ -18,8 +18,8 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -99,21 +99,25 @@ def path(starting_point):
     graph = dft(player)
 
    
-    visited = {} 
+    visited = {}
+    visits = {} 
     
     if graph:
 
         s = Stack()
         s.push([starting_point.current_room.id])
-        
     
         while s.size() > 0:
             path = s.pop()
             current_room = path[-1]
             count = 0
             random_direction = ''
+           
 
-            if current_room not in visited:
+            if current_room in visited:
+                get_list = len(traversal_path)
+                print(get_list)
+            if len(visited) < 9:
                 visited[current_room] = path
                 randoms = []
                 for idx, val in graph[current_room].items():
@@ -121,12 +125,10 @@ def path(starting_point):
                     if val is not '?':
                         randoms.append(idx)
                         random_direction = random.choice(randoms)
-                        print(randoms, "RANDOMS LIST")
                     
 
                 if len(random_direction) == 1:
                     if len(traversal_path) == 0:
-                        print(random_direction, "line 129")
                         traversal_path.append(random_direction)
                         get_new_room = graph[current_room][random_direction]
                         s.push([get_new_room])
@@ -143,8 +145,10 @@ def path(starting_point):
 
                     #     s.push([next_position])
         
-        print(traversal_path, "TRAVERSAL PATH")
-        return graph
+        print(len(traversal_path), "TRAVERSAL PATH LENGTH")
+        print(len(visited), "LENGTH VISITED")
+        print(graph, "GRAPH")
+        return traversal_path
     
 
 
