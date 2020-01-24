@@ -1,3 +1,8 @@
+# 1st part build graph - a list with no question marks
+# 2nd walk through to visit every room
+
+
+
 from room import Room
 from player import Player
 from world import World
@@ -13,11 +18,11 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-# map_file = "maps/test_line.txt"
+map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -27,14 +32,14 @@ world.load_graph(room_graph)
 world.print_rooms()
 
 player = Player(world.starting_room)
-print(player.current_room.id, "ID")
-print(player.current_room.description, "DESCRIPTION")
-print(player.current_room.get_exits(), "EXITS")
-print(player.current_room.n_to, "N to")
-print(player.current_room.s_to, "S to")
-print(player.current_room.w_to, "W to")
-print(player.current_room.e_to, "E to")
-print(player.travel('n'), "PLAYER.TRAVEL")
+# print(player.current_room.id, "ID")
+# print(player.current_room.description, "DESCRIPTION")
+# print(player.current_room.get_exits(), "EXITS")
+# print(player.current_room.n_to, "N to")
+# print(player.current_room.s_to, "S to")
+# print(player.current_room.w_to, "W to")
+# print(player.current_room.e_to, "E to")
+# print(player.travel('n'), "PLAYER.TRAVEL")
 
 
 
@@ -80,15 +85,70 @@ def dft(starting_position):
                             visited[position.id][idx] = position.e_to.id
                         if idx == 'w':
                             visited[position.id][idx] = position.w_to.id
+                        
 
             for next_position in world.rooms:
                 stack.push(world.rooms[next_position])
           
 
+                
     return visited
 
-print(dft(player))
 
+def path(starting_point):
+    graph = dft(player)
+
+   
+    visited = {} 
+    
+    if graph:
+
+        s = Stack()
+        s.push([starting_point.current_room.id])
+        
+    
+        while s.size() > 0:
+            path = s.pop()
+            current_room = path[-1]
+            count = 0
+            random_direction = ''
+
+            if current_room not in visited:
+                visited[current_room] = path
+                randoms = []
+                for idx, val in graph[current_room].items():
+
+                    if val is not '?':
+                        randoms.append(idx)
+                        random_direction = random.choice(randoms)
+                        print(randoms, "RANDOMS LIST")
+                    
+
+                if len(random_direction) == 1:
+                    if len(traversal_path) == 0:
+                        print(random_direction, "line 129")
+                        traversal_path.append(random_direction)
+                        get_new_room = graph[current_room][random_direction]
+                        s.push([get_new_room])
+                        random_direction = ''
+
+                    else:
+                        traversal_path.append(random_direction)
+                        get_new_room = graph[current_room][random_direction]
+                        s.push([get_new_room])
+                        random_direction = ''
+
+
+                    # for next_position in graph:
+
+                    #     s.push([next_position])
+        
+        print(traversal_path, "TRAVERSAL PATH")
+        return graph
+    
+
+
+print(path(player))
 
 # TRAVERSAL TEST
 visited_rooms = set()
@@ -119,3 +179,68 @@ else:
 #         break
 #     else:
 #         print("I did not understand that command.")
+
+
+# def path(starting_point):
+#     graph = dft(player)
+#     visited = {} 
+#     count = 0
+#     if graph:
+
+#         queue = Queue()
+#         queue.enqueue([starting_point.current_room.id])
+    
+#         while queue.size() > 0:
+#             path = queue.dequeue()
+#             current_room = path[-1]
+
+#             if current_room not in visited:
+#                 visited[current_room] = path
+#                 for paths in graph[current_room]:
+#                     if graph[current_room][paths] != '?':
+#                         if len(traversal_path) == 0:
+#                             traversal_path.append(paths)
+#                         elif paths == 'n' and traversal_path[count] == 's' or paths == 's' and traversal_path[count] == 'n':
+#                             continue
+#                         elif paths == 'w' and traversal_path[count] == "e" or paths == 'e' and traversal_path[count] == "w":
+#                             continue
+#                         else:
+#                             traversal_path.append(paths)
+#                             count += 1
+
+#                     for next_position in graph:
+#                         # print(next_position, "NEXT POSITION")
+#                         queue.enqueue([next_position])
+        
+#         print(traversal_path, "TRAVERSAL PATH")
+#         return graph
+    
+# def path(starting_point):
+#     graph = dft(player)
+#     visited = {} 
+#     count = 0
+#     if graph:
+
+#         s = Stack()
+#         s.push([starting_point.current_room.id])
+    
+#         while s.size() > 0:
+#             path = s.pop()
+#             current_room = path[-1]
+
+#             if current_room not in visited:
+#                 visited[current_room] = path
+#                 for paths in graph[current_room]:
+#                     if graph[current_room][paths] != '?':
+#                         prev_room = current_room - 1
+#                         print(f"current_room {current_room}, prev room {prev_room}")
+#                         if current_room != current_room - 1:
+#                             traversal_path.append(paths)
+                            
+
+#                     for next_position in graph:
+#                         # print(next_position, "NEXT POSITION")
+#                         s.push([next_position])
+        
+#         print(traversal_path, "TRAVERSAL PATH")
+#         return graph
